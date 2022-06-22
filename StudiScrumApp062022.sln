@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudiScrumApp062022", "StudiScrumApp062022\StudiScrumApp062022.csproj", "{F406457F-251C-435C-9023-014B543CB948}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudiScrumApp062022", "StudiScrumApp062022\StudiScrumApp062022.csproj", "{F406457F-251C-435C-9023-014B543CB948}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SrumApp.Repository", "SrumApp.Repository\SrumApp.Repository.csproj", "{CF134C28-081B-46C1-8EF1-B1AB2385C520}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{F406457F-251C-435C-9023-014B543CB948}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F406457F-251C-435C-9023-014B543CB948}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F406457F-251C-435C-9023-014B543CB948}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF134C28-081B-46C1-8EF1-B1AB2385C520}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF134C28-081B-46C1-8EF1-B1AB2385C520}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF134C28-081B-46C1-8EF1-B1AB2385C520}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF134C28-081B-46C1-8EF1-B1AB2385C520}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
