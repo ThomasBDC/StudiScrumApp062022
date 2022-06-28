@@ -15,6 +15,7 @@ namespace ScrumApp.Models
         [Display(Name = "Prenom")]
         public string Forename { get; set; }
 
+        [RegularExpression(@"^[^@\s]+@[^@\s]+\.[^@\s]+", ErrorMessage ="L'email n'est pas valide")]
         [Required(ErrorMessage ="Le mail est obligatoire")]
         public string Mail { get; set; }
         
