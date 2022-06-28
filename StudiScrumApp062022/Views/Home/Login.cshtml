@@ -95,12 +95,13 @@
 	<div class="inputGroup inputGroup1">
 		<label for="email1">Email</label>
 		<input asp-for="Login" type="text" id="email" class="email" maxlength="256"/>
-		<p class="helper helper1">email@domain.com</p>
+		<span asp-validation-for="Login" class="text-danger"></span>
 		<span class="indicator"></span>
 	</div>
 	<div class="inputGroup inputGroup2">
 		<label for="password">Password</label>
 		<input asp-for="Password" type="password" id="password" class="password" />
+		<span asp-validation-for="Password" class="text-danger"></span>
 	</div>
 	<div class="inputGroup inputGroup3">
 		<button type="submit" id="login">Log in</button>

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using ScrumApp.Models;
 using StudiScrumApp062022.Models;
 using System;
 using System.Collections.Generic;
@@ -51,7 +52,8 @@ namespace StudiScrumApp062022.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel user)
         {
-            if(user.Login == "Thomas" && user.Password == "BDCpwd")
+            //Checker la connexion en BDD au lieu de le faire en dur
+            if(user.Login == "Thomas" && user.Password == "BDCpwd")//Si OK
             {
                 var claim = new List<Claim>();
                 claim.Add(new Claim(ClaimTypes.Name, user.Login));
@@ -60,6 +62,15 @@ namespace StudiScrumApp062022.Controllers
                 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimPrincipal);
 
+            }
+            else
+            {
+                ModelState.AddModelError(nameof(LoginModel.Password), "Informations de connexion incorrectes");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(user);
             }
 
             if (string.IsNullOrWhiteSpace(user.ReturnUrl))
@@ -83,6 +94,26 @@ namespace StudiScrumApp062022.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult SignUp()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult SignUp(UserModel userModel)
+        {
+            //faire l'inscription en BDD 
+
+            if (!ModelState.IsValid)
+            {
+                return View(userModel);
+            }
+            else
+            {
+                return RedirectToAction("Login");
+            }
         }
     }
 }

@@ -5,7 +5,9 @@ VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudiScrumApp062022", "StudiScrumApp062022\StudiScrumApp062022.csproj", "{F406457F-251C-435C-9023-014B543CB948}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SrumApp.Repository", "SrumApp.Repository\SrumApp.Repository.csproj", "{CF134C28-081B-46C1-8EF1-B1AB2385C520}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SrumApp.Repository", "SrumApp.Repository\SrumApp.Repository.csproj", "{CF134C28-081B-46C1-8EF1-B1AB2385C520}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScrumApp.Models", "ScrumApp.Models\ScrumApp.Models.csproj", "{056E907B-9D22-41AD-8CB2-1A3BD7F1C401}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{CF134C28-081B-46C1-8EF1-B1AB2385C520}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF134C28-081B-46C1-8EF1-B1AB2385C520}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF134C28-081B-46C1-8EF1-B1AB2385C520}.Release|Any CPU.Build.0 = Release|Any CPU
+		{056E907B-9D22-41AD-8CB2-1A3BD7F1C401}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{056E907B-9D22-41AD-8CB2-1A3BD7F1C401}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{056E907B-9D22-41AD-8CB2-1A3BD7F1C401}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{056E907B-9D22-41AD-8CB2-1A3BD7F1C401}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
