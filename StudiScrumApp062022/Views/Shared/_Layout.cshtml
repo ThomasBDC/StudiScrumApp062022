@@ -27,6 +27,19 @@
                         </li>
                     </ul>
                 </div>
+                <div>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                         <p>Bonjour @User.Identity.Name</p>
+                         <a class="btn btn-danger" 
+                            asp-controller="Home" asp-action="Logout" >Se déconnecter</a>
+                    }
+                    else
+                    {
+                         <a class="btn btn-success" 
+                            asp-controller="Home" asp-action="Login" >Se connecter</a>
+                    }
+                </div>
             </div>
         </nav>
     </header>

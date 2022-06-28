@@ -33,9 +33,13 @@ namespace StudiScrumApp062022.Controllers
             return View();
         }
 
-        public IActionResult Login()
+        public IActionResult Login(string ReturnUrl)
         {
-            return View();
+            var vm = new LoginModel()
+            {
+                ReturnUrl = ReturnUrl
+            };
+            return View("Login", vm);
         }
 
         /// <summary>
@@ -57,6 +61,21 @@ namespace StudiScrumApp062022.Controllers
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimPrincipal);
 
             }
+
+            if (string.IsNullOrWhiteSpace(user.ReturnUrl))
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return Redirect(user.ReturnUrl);
+            }
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
             return RedirectToAction("Index");
         }
 
