@@ -67,7 +67,7 @@
     .yetiForm input[type=email], .yetiForm input[type=text], .yetiForm input[type=password] {
         display: block;
         margin: 0;
-        padding: 0 1em 0;
+        padding: 0 2em 0 1em;
         background-color: #f3fafd;
         border: solid 2px #217093;
         border-radius: 4px;
@@ -111,4 +111,11 @@
             background-color: #217093;
         }
 
-    
+button#showPassword {
+    position: absolute;
+    background: transparent;
+    color: black;
+    top: 40px;
+    right: 10px;
+    width: 5px;
+}

@@ -9,4 +9,8 @@
     <PackageReference Include="MySql.Data" Version="8.0.29" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ScrumApp.Models\ScrumApp.Models.csproj" />
+  </ItemGroup>
+
 </Project>

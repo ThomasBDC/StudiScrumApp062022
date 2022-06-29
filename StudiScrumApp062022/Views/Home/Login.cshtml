@@ -99,14 +99,17 @@
 		<span class="indicator"></span>
 	</div>
 	<div class="inputGroup inputGroup2">
-		<label for="password">Password</label>
+		<label for="password">Mot de passe</label>
 		<input asp-for="Password" type="password" id="password" class="password" />
+		<button id="showPassword" type="button" onclick="changePasswordVisibility()"><i class="fa-solid fa-eye"></i></button>
 		<span asp-validation-for="Password" class="text-danger"></span>
 	</div>
 	<div class="inputGroup inputGroup3">
-		<button type="submit" id="login">Log in</button>
+		<button type="submit" id="login">Connexion</button>
 	</div>	
-
+	<div class="text-center">
+		<a asp-controller="Home" asp-action="SignUp">Pas de compte ? Inscrivez vous !</a>
+	</div>
 	<input type="hidden" asp-for="ReturnUrl"/>
 </form>
 
@@ -316,5 +319,19 @@
 		password.addEventListener('blur', onPasswordBlur);
 		TweenMax.set(armL, {x: -93, y: 220, rotation: 105, transformOrigin: "top left"});
 		TweenMax.set(armR, {x: -93, y: 220, rotation: -105, transformOrigin: "top right"});
+
+
+		function changePasswordVisibility(){
+            let passwordField = document.getElementById("password");
+            let btnEye = document.getElementById("showPassword");
+            if (passwordField.type == 'text') {
+                passwordField.type = 'password';
+                btnEye.innerHTML = '<i class="fa-solid fa-eye"></i>';
+			}
+			else{
+                passwordField.type = 'text';
+                btnEye.innerHTML = '<i class="fa-solid fa-eye-slash"></i>';
+			}
+		}
 	</script>
 }
