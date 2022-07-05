@@ -74,6 +74,7 @@ namespace StudiScrumApp062022.Controllers
                     claim.Add(new Claim(ClaimTypes.Surname, user.Surname));
                     claim.Add(new Claim(ClaimTypes.Name, user.Forename));
                     claim.Add(new Claim(ClaimTypes.Email, user.Mail));
+                    claim.Add(new Claim(ClaimTypes.NameIdentifier, user.IdUser.ToString()));
 
                     var claimPrincipal = new ClaimsPrincipal(new ClaimsIdentity(claim, CookieAuthenticationDefaults.AuthenticationScheme));
 

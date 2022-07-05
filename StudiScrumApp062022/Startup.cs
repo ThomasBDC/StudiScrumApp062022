@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SrumApp.Repository;
 using SrumApp.Repository.UserRepository;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,7 @@ namespace StudiScrumApp062022
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<AuthRepository>();
             services.AddTransient<UserRepository>();
+            services.AddTransient<ProjectRepository>();
             services.AddHttpClient();
 
             services.AddSession(options =>
