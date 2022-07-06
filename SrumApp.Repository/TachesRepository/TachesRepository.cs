@@ -7,58 +7,45 @@ using System.Text;
 
 namespace SrumApp.Repository
 {
-    public class ProjectRepository : BaseRepository
+    public class TachesRepository : BaseRepository
     {
         private readonly IConfiguration _configuration;
 
-        public ProjectRepository(IConfiguration configuration): base(configuration)
+        public TachesRepository(IConfiguration configuration): base(configuration)
         {
             _configuration = configuration;
         }
 
-        public List<ProjectModel> GetProjects(int idProprietaire)
+        public List<TacheModel> GetTachesForProjet(int idProjet)
         {
             var cnn = this.OpenConnexion();
 
             string sql = @"
-                SELECT 
-                    p.idprojet,
-                    p.nom,
-                    p.description,
-                    p.date_debut,
-                    p.date_fin,
-                    u.forename,
-                    u.surname,
-                    u.iduser
-                FROM projet p
-                INNER JOIN 
-                    users u on u.iduser = p.id_proprietaire
-                WHERE 
-                    p.id_proprietaire = @idProprietaire
+                select 
+                t.idtaches, 
+                t.nom,
+                t.description,
+                t.status
+                from taches t
+                where
+                t.id_projet_parent = @idProjet
             ";
 
             var cmd = new MySqlCommand(sql, cnn);
-            cmd.Parameters.AddWithValue("@idProprietaire", idProprietaire);
+            cmd.Parameters.AddWithValue("@idProjet", idProjet);
 
             var reader = cmd.ExecuteReader();
 
-            List<ProjectModel> result = new List<ProjectModel>();
+            List<TacheModel> result = new List<TacheModel>();
 
             while (reader.Read())
             {
-                result.Add(new ProjectModel()
+                result.Add(new TacheModel()
                 {
-                    IdProjet = Convert.ToInt16(reader["idprojet"]),
-                    Name = reader["nom"].ToString(),
+                    Id = Convert.ToInt16(reader["idtaches"]),
+                    Nom = reader["nom"].ToString(),
                     Description = reader["description"].ToString(),
-                    DateDebut = DateTime.Parse(reader["date_debut"].ToString()),
-                    DateFin = DateTime.Parse(reader["date_fin"].ToString()),
-                    Proprietaire = new UserModel()
-                    {
-                        IdUser = Convert.ToInt16(reader["iduser"]),
-                        Forename = reader["forename"].ToString(),
-                        Surname = reader["surname"].ToString(),
-                    }
+                    Status = (StatusTache)Convert.ToInt16(reader["status"])
                 });
             }
 

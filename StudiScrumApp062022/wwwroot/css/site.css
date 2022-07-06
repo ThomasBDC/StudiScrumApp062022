@@ -69,3 +69,29 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+
+#kanbanContainer {
+    min-height: 65vh;
+}
+
+.taskbar-container {
+    height: 100%;
+    padding: 15px;
+}
+
+.taskbar-container.todo {
+    background-color: #a3b4ff;
+}
+
+.taskbar-container.in-progress {
+    background-color: #daffa5;
+}
+
+.taskbar-container.done {
+    background-color: #ffefa3;
+}
+
+.taskbar-header {
+    display: flex;
+    justify-content: space-between;
+}

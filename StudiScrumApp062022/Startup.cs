@@ -33,6 +33,7 @@ namespace StudiScrumApp062022
             services.AddTransient<AuthRepository>();
             services.AddTransient<UserRepository>();
             services.AddTransient<ProjectRepository>();
+            services.AddTransient<TachesRepository>();
             services.AddHttpClient();
 
             services.AddSession(options =>

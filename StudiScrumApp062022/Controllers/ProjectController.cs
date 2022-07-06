@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ScrumApp.Models;
 using SrumApp.Repository;
+using StudiScrumApp062022.Models;
 using StudiScrumApp062022.Utils;
 using System;
 using System.Linq;
@@ -14,9 +15,11 @@ namespace StudiScrumApp062022.Controllers
     public class ProjectController : Controller
     {
         private readonly ProjectRepository _projectRepository;
-        public ProjectController(ProjectRepository projectRepository)
+        private readonly TachesRepository _tacheRepository;
+        public ProjectController(ProjectRepository projectRepository, TachesRepository tacheRepository)
         {
             _projectRepository = projectRepository;
+            _tacheRepository = tacheRepository;
         }
 
         // GET: ProjectController
@@ -34,7 +37,14 @@ namespace StudiScrumApp062022.Controllers
         // GET: ProjectController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var projet = _projectRepository.GetProject(id);
+            var alltaches = _tacheRepository.GetTachesForProjet(id);
+            var vm = new ProjetViewModel()
+            {
+                Projet = projet,
+                allTaches = alltaches
+            };
+            return View(vm);
         }
 
         // GET: ProjectController/Create
@@ -71,21 +81,27 @@ namespace StudiScrumApp062022.Controllers
         // GET: ProjectController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var monProjet = _projectRepository.GetProject(id);
+            return View(monProjet);
         }
 
         // POST: ProjectController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, ProjectModel model)
         {
             try
             {
+                model.Proprietaire = new UserModel()
+                {
+                    IdUser = this.GetIdUserConnecte()
+                };
+                _projectRepository.EditProject(model);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return View(model);
             }
         }
 

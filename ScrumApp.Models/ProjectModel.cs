@@ -13,4 +13,5 @@ namespace ScrumApp.Models
         public DateTime DateFin { get; set; }
         public UserModel Proprietaire { get; set; }
     }
+
 }

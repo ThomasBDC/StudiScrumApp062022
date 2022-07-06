@@ -1,0 +1,57 @@
+﻿@model StudiScrumApp062022.Models.ProjetViewModel
+
+@{
+    ViewData["Title"] = Model.Projet.Name;
+}
+
+<h1>@Model.Projet.Name</h1>
+
+<div>
+    <div class="row">
+        <h4 class="col-6">@Model.Projet.Description</h4>
+        <div class="col-3">Début : @Model.Projet.DateDebut.ToShortDateString()</div>
+        <div class="col-3">Fin : @Model.Projet.DateFin.ToShortDateString()</div>
+    </div>
+    <hr />
+    <div class="row" id="kanbanContainer">
+        <div class="col-4">
+            <div class="taskbar-container todo">
+                <div class="taskbar-header">
+                    <h5>Todo</h5>
+                    <button class="btn btn-outline-primary">Add</button>
+                </div>
+                <div class="taskbar-body">
+                    @foreach(var tache in Model.allTaches)
+                    {
+                        <b>@tache.Nom</b>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="taskbar-container in-progress">
+                <div class="taskbar-header">
+                    <h5>In progress</h5>
+                </div>
+                <div class="taskbar-body">
+
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="taskbar-container done">
+                <div class="taskbar-header">
+                    <h5>Done</h5>
+                </div>
+                <div class="taskbar-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Projet.IdProjet }) |
+    <a asp-action="Index">Back to List</a>
+</div>
