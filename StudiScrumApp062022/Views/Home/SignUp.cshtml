@@ -27,9 +27,19 @@
                 <span asp-validation-for="Mail" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="MailValidation" class="control-label"></label>
+                <input asp-for="MailValidation" class="form-control" />
+                <span asp-validation-for="MailValidation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
                 <input asp-for="Password" class="form-control" type="password" />
                 <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PasswordValidation" class="control-label"></label>
+                <input asp-for="PasswordValidation" class="form-control" type="password" />
+                <span asp-validation-for="PasswordValidation" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Phone" class="control-label"></label>

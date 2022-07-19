@@ -137,6 +137,21 @@ namespace StudiScrumApp062022.Controllers
                 return StatusCode(400);
             }
 
+            if(userModel.Password != userModel.PasswordValidation)
+            {
+                ModelState.AddModelError(nameof(userModel.PasswordValidation), "Les mots de passe ne sont pas identiques");
+            }
+
+            if (userModel.Mail != userModel.MailValidation)
+            {
+                ModelState.AddModelError(nameof(userModel.MailValidation), "Les mails ne sont pas identiques");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(userModel);
+            }
+
             try
             {
 
@@ -154,14 +169,8 @@ namespace StudiScrumApp062022.Controllers
                 return StatusCode(500);
             }
 
-            if (!ModelState.IsValid)
-            {
-                return View(userModel);
-            }
-            else
-            {
-                return RedirectToAction("Login");
-            }
+            
+            return RedirectToAction("Login");
         }
 
         public IActionResult ForgottenPassword()
@@ -205,7 +214,6 @@ namespace StudiScrumApp062022.Controllers
                 }
             }
         }
-
         
         /// <summary>
         /// 
