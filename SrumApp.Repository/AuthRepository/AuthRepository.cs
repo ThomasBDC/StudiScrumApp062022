@@ -78,5 +78,27 @@ namespace SrumApp.Repository.UserRepository
             cmd.ExecuteNonQuery();
             cnn.Close();
         }
+
+        public void ChangePassword(int userId, string passwordHash, string passwordSalt)
+        {
+            var cnn = this.OpenConnexion();
+
+            string sql = @"
+                UPDATE users
+                SET
+                    password = @passwordHash,
+                    password_key = @passwordSalt
+                WHERE
+                    iduser = @iduser
+                ";
+
+            var cmd = new MySqlCommand(sql, cnn);
+            cmd.Parameters.AddWithValue("@passwordHash", passwordHash);
+            cmd.Parameters.AddWithValue("@passwordSalt", passwordSalt);
+            cmd.Parameters.AddWithValue("@iduser", userId);
+
+            cmd.ExecuteNonQuery();
+            cnn.Close();
+        }
     }
 }

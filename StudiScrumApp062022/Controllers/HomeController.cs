@@ -171,7 +171,7 @@ namespace StudiScrumApp062022.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult SendEmailResetPassword(string email)
+        public async Task<IActionResult> SendEmailResetPassword(string email)
         {
             //Vérifier si l'utilisateur existe
             var user = _userRepository.GetUser(email);
@@ -186,58 +186,27 @@ namespace StudiScrumApp062022.Controllers
                 var cleRecuperation = Guid.NewGuid().ToString(); 
                 _authRepository.SetCleRecuperationForUser(user.IdUser, cleRecuperation);
 
-                ////Envoyer le mail
-                //MailMessage mail = new MailMessage();
+                //Envoyer le mail
 
-                //mail.From = new MailAddress("studiscrumapp@gmail.com");
-                //mail.To.Add(email);
-                //mail.Subject = "Réinitialisation du mot de passe";
+                string link = "<a href='https://localhost:44319/Home/ResetPassword?p1=" + cleRecuperation + "&p2=" + user.IdUser + "'>ce lien</a>";
 
-                //string link = "<a href='https://localhost:44319/Home/ResetPassword?p1="+cleRecuperation+"&p2="+user.IdUser+"'>ce lien</a>";
-                
-                //mail.Body = "Vous pouvez réinitialiser votre mdp via "+link;
+                string body = "Vous pouvez réinitialiser votre mdp via " + link;
 
-                //SmtpClient smtpClient = new SmtpClient("smtp.gmail.com");
-                //smtpClient.Port = 587;
-                //smtpClient.UseDefaultCredentials = true;
-                //smtpClient.Credentials = new NetworkCredential("studithomasbdc@gmail.com", "azerty2022");
-                //smtpClient.EnableSsl = true;
-                //smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                string subject = "Réinitialisation du mot de passe";
+                bool isOk = await SendMail(subject, body, email);
 
-                //smtpClient.Send(mail);
-
-                return RedirectToAction("Login");
-            }
-        }
-
-        [HttpGet("TestMail")]
-        public async Task<IActionResult> SendMailTest()
-        {
-            try
-            {
-                string fromMail = "devtechwatch@alwaysdata.net";
-                
-                var email = new MimeMessage();
-                email.From.Add(MailboxAddress.Parse(fromMail));
-                email.To.Add(MailboxAddress.Parse("thomasbdc@yopmail.com"));
-                email.Subject = "Sending Email Using OAuth Net 6.0";
-                email.Body = new TextPart(TextFormat.Html) { Text = "<h3>Mail Body</h3>" };
-                using (var client = new SmtpClient())
+                if (!isOk)
                 {
-                    client.Connect("smtp-devtechwatch.alwaysdata.net", 587);
-                    var oauth2 = new SaslMechanismLogin(System.Text.Encoding.UTF8, new NetworkCredential(fromMail, "NYV8e@6u4$j4Wc7Eh"));
-                    client.Authenticate(oauth2);
-                    await client.SendAsync(email);
-                    client.Disconnect(true);
+                    return View(nameof(this.ForgottenPassword));
                 }
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500);
+                else
+                {
+                   return RedirectToAction("Login");
+                }
             }
         }
 
+        
         /// <summary>
         /// 
         /// </summary>
@@ -246,7 +215,73 @@ namespace StudiScrumApp062022.Controllers
         /// <returns></returns>
         public IActionResult ResetPassword(string p1, int p2)
         {
-            return View();
+            //Récupérer l'utilisateur p2
+            var user = _userRepository.GetUser(p2);
+            
+            //Vérifier sa clé de récupération, et sa validité
+            if(p1 == user.CleRecuperation && user.DateCleRecup.AddHours(3) >= DateTime.Now)
+            {
+                //Si tout est bon, on renvoit la vue avec le formulaire pour changer de mot de passe
+                return View("ChangePassword", user);
+            }
+            else
+            {
+                return View("Index");
+            }
         }
+
+        public IActionResult ChangePasswordAction(UserModel user)
+        {
+            //Modifier le mdp de l'utilisateur
+            var userBDD = _userRepository.GetUser(user.IdUser);
+
+            //Vérifier sa clé de récupération, et sa validité
+            if (userBDD.CleRecuperation == user.CleRecuperation && userBDD.DateCleRecup.AddHours(3) >= DateTime.Now)
+            {
+                //Si tout est bon, on renvoit la vue avec le formulaire pour changer de mot de passe
+                
+                //Générer ma clé d'encryptage (passwordSalt)
+                string passwordSalt = Helpers.PasswordSaltInBase64();
+
+                //Hasher mon mdp avec ma clé d'encryptage
+                string passwordHashed = Helpers.PasswordToHashBase64(user.Password, passwordSalt);
+
+                _authRepository.ChangePassword(user.IdUser, passwordHashed, passwordSalt);
+
+                return View("Login");
+            }
+            else
+            {
+                return StatusCode(500);
+            }
+        }
+
+        private async Task<bool> SendMail(string sujet, string body, string destinataire)
+        {
+            try
+            {
+                string fromMail = "devtechwatch@alwaysdata.net";
+
+                var email = new MimeMessage();
+                email.From.Add(MailboxAddress.Parse(fromMail));
+                email.To.Add(MailboxAddress.Parse(destinataire));
+                email.Subject = sujet;
+                email.Body = new TextPart(TextFormat.Html) { Text = body };
+                using (var client = new SmtpClient())
+                {
+                    client.Connect("smtp-devtechwatch.alwaysdata.net", 587);
+                    var oauth2 = new SaslMechanismLogin(System.Text.Encoding.UTF8, new NetworkCredential(fromMail, "NYV8e@6u4$j4Wc7Eh"));
+                    client.Authenticate(oauth2);
+                    await client.SendAsync(email);
+                    client.Disconnect(true);
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
     }
 }

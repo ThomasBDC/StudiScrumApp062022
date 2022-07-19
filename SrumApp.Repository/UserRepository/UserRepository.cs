@@ -61,6 +61,49 @@ namespace SrumApp.Repository.UserRepository
             return user;
         }
 
+        public UserModel GetUser(int id)
+        {
+            var cnn = this.OpenConnexion();
+
+            string sql = @"
+                SELECT 
+                    u.iduser,
+                    u.surname,
+                    u.forename,
+                    u.mail,
+                    u.phone,
+                    u.date_embauche,
+                    u.date_renvoi,
+                    u.cle_recuperation,
+                    u.date_clerecup
+                FROM users u
+                where u.iduser = @iduser;
+            ";
+
+            var cmd = new MySqlCommand(sql, cnn);
+            cmd.Parameters.AddWithValue("@iduser", id);
+
+            var reader = cmd.ExecuteReader();
+
+            UserModel user = null;
+
+            if (reader.Read())
+            {
+                user = new UserModel()
+                {
+                    IdUser = Convert.ToInt16(reader["iduser"]),
+                    Surname = reader["surname"].ToString(),
+                    Forename = reader["forename"].ToString(),
+                    Mail = reader["mail"].ToString(),
+                    Phone = reader["phone"].ToString(),
+                    CleRecuperation = reader["cle_recuperation"].ToString(),
+                    DateCleRecup = DateTime.Parse(reader["date_clerecup"].ToString()),
+                };
+            }
+
+            cnn.Close();
+            return user;
+        }
 
     }
 }

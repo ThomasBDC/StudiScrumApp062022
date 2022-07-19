@@ -30,6 +30,7 @@ namespace ScrumApp.Models
         public string DateEmbauche { get; set; }
         public string DateRenvoi { get; set; }
         public string CleRecuperation { get; set; }
+        public DateTime DateCleRecup { get; set; }
         public string PasswordKey { get; set; }
     }
 }
