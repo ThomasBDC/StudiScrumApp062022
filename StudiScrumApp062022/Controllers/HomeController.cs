@@ -215,26 +215,8 @@ namespace StudiScrumApp062022.Controllers
         {
             try
             {
-                string clientId = "63749115380-ueur2g9gj9b5ed87grb733mo6pv92m79.apps.googleusercontent.com";
-                string clientSecret = "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";
-                string fromMail = "studithomasbdc@gmail.com";
-                string[] scopes = new string[] { "https://mail.google.com/" };
-                ClientSecrets clientSecrets = new ClientSecrets()
-                {
-                    ClientId = clientId,
-                    ClientSecret = clientSecret
-                };
-                //Requesting authorization
-                UserCredential userCredential = GoogleWebAuthorizationBroker.AuthorizeAsync(clientSecrets, scopes, "user", CancellationToken.None).Result;
-                //Authorization granted or not required (if the saved access token already available)
-                if (userCredential.Token.IsExpired(userCredential.Flow.Clock))
-                {
-                    //The access token has expired, refreshing it
-                    if (!userCredential.RefreshTokenAsync(CancellationToken.None).Result)
-                    {
-                        return StatusCode(500);
-                    }
-                }
+                string fromMail = "devtechwatch@alwaysdata.net";
+                
                 var email = new MimeMessage();
                 email.From.Add(MailboxAddress.Parse(fromMail));
                 email.To.Add(MailboxAddress.Parse("thomasbdc@yopmail.com"));
@@ -242,8 +224,8 @@ namespace StudiScrumApp062022.Controllers
                 email.Body = new TextPart(TextFormat.Html) { Text = "<h3>Mail Body</h3>" };
                 using (var client = new SmtpClient())
                 {
-                    client.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
-                    var oauth2 = new SaslMechanismOAuth2(fromMail, userCredential.Token.AccessToken);
+                    client.Connect("smtp-devtechwatch.alwaysdata.net", 587);
+                    var oauth2 = new SaslMechanismLogin(System.Text.Encoding.UTF8, new NetworkCredential(fromMail, "NYV8e@6u4$j4Wc7Eh"));
                     client.Authenticate(oauth2);
                     await client.SendAsync(email);
                     client.Disconnect(true);
