@@ -30,7 +30,7 @@ namespace SrumApp.Repository.UserRepository
                     u.phone,
                     u.date_embauche,
                     u.date_renvoi,
-                    u.subjectid,
+                    u.cle_recuperation,
                     u.password_key
                 FROM users u
                 where u.mail = @mail;
@@ -57,7 +57,10 @@ namespace SrumApp.Repository.UserRepository
                 };
             }
 
+            cnn.Close();
             return user;
         }
+
+
     }
 }

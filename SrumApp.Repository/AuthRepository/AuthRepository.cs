@@ -52,6 +52,31 @@ namespace SrumApp.Repository.UserRepository
             cmd.Parameters.AddWithValue("@password_key", passwordSalt);
 
             cmd.ExecuteNonQuery();
+
+            cnn.Close();
+        }
+
+
+        public void SetCleRecuperationForUser(int userId, string cleRecuperation)
+        {
+            var cnn = this.OpenConnexion();
+
+            string sql = @"
+                UPDATE users
+                SET
+                    cle_recuperation = @cleRecup,
+                    date_clerecup = @datecleRecup
+                WHERE
+                    iduser = @iduser
+                ";
+
+            var cmd = new MySqlCommand(sql, cnn);
+            cmd.Parameters.AddWithValue("@cleRecup", cleRecuperation);
+            cmd.Parameters.AddWithValue("@datecleRecup", DateTime.Now);
+            cmd.Parameters.AddWithValue("@iduser", userId);
+
+            cmd.ExecuteNonQuery();
+            cnn.Close();
         }
     }
 }

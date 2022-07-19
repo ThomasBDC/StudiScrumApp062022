@@ -29,7 +29,7 @@ namespace ScrumApp.Models
         [Display(Name = "Date d'embauche")]
         public string DateEmbauche { get; set; }
         public string DateRenvoi { get; set; }
-        public string SubjectId { get; set; }
+        public string CleRecuperation { get; set; }
         public string PasswordKey { get; set; }
     }
 }

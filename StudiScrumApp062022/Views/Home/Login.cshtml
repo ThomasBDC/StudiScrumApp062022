@@ -108,7 +108,10 @@
 		<button type="submit" id="login">Connexion</button>
 	</div>	
 	<div class="text-center">
-		<a asp-controller="Home" asp-action="SignUp">Pas de compte ? Inscrivez vous !</a>
+		<a class="text-info" asp-controller="Home" asp-action="SignUp">Pas de compte ? Inscrivez vous !</a>
+	</div>
+	<div class="text-center">
+		<a class="" asp-controller="Home" asp-action="ForgottenPassword">J'ai oublié mon mot de passe</a>
 	</div>
 	<input type="hidden" asp-for="ReturnUrl"/>
 </form>

@@ -11,8 +11,16 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
+
+using Google.Apis.Auth.OAuth2;
+using MailKit.Net.Smtp;
+using MailKit.Security;
+using MimeKit;
+using MimeKit.Text;
+using System.Threading;
 
 namespace StudiScrumApp062022.Controllers
 {
@@ -154,6 +162,109 @@ namespace StudiScrumApp062022.Controllers
             {
                 return RedirectToAction("Login");
             }
+        }
+
+        public IActionResult ForgottenPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult SendEmailResetPassword(string email)
+        {
+            //Vérifier si l'utilisateur existe
+            var user = _userRepository.GetUser(email);
+
+            if(user == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                //Si il existe on démarre le processus
+                var cleRecuperation = Guid.NewGuid().ToString(); 
+                _authRepository.SetCleRecuperationForUser(user.IdUser, cleRecuperation);
+
+                ////Envoyer le mail
+                //MailMessage mail = new MailMessage();
+
+                //mail.From = new MailAddress("studiscrumapp@gmail.com");
+                //mail.To.Add(email);
+                //mail.Subject = "Réinitialisation du mot de passe";
+
+                //string link = "<a href='https://localhost:44319/Home/ResetPassword?p1="+cleRecuperation+"&p2="+user.IdUser+"'>ce lien</a>";
+                
+                //mail.Body = "Vous pouvez réinitialiser votre mdp via "+link;
+
+                //SmtpClient smtpClient = new SmtpClient("smtp.gmail.com");
+                //smtpClient.Port = 587;
+                //smtpClient.UseDefaultCredentials = true;
+                //smtpClient.Credentials = new NetworkCredential("studithomasbdc@gmail.com", "azerty2022");
+                //smtpClient.EnableSsl = true;
+                //smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+
+                //smtpClient.Send(mail);
+
+                return RedirectToAction("Login");
+            }
+        }
+
+        [HttpGet("TestMail")]
+        public async Task<IActionResult> SendMailTest()
+        {
+            try
+            {
+                string clientId = "63749115380-ueur2g9gj9b5ed87grb733mo6pv92m79.apps.googleusercontent.com";
+                string clientSecret = "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";
+                string fromMail = "studithomasbdc@gmail.com";
+                string[] scopes = new string[] { "https://mail.google.com/" };
+                ClientSecrets clientSecrets = new ClientSecrets()
+                {
+                    ClientId = clientId,
+                    ClientSecret = clientSecret
+                };
+                //Requesting authorization
+                UserCredential userCredential = GoogleWebAuthorizationBroker.AuthorizeAsync(clientSecrets, scopes, "user", CancellationToken.None).Result;
+                //Authorization granted or not required (if the saved access token already available)
+                if (userCredential.Token.IsExpired(userCredential.Flow.Clock))
+                {
+                    //The access token has expired, refreshing it
+                    if (!userCredential.RefreshTokenAsync(CancellationToken.None).Result)
+                    {
+                        return StatusCode(500);
+                    }
+                }
+                var email = new MimeMessage();
+                email.From.Add(MailboxAddress.Parse(fromMail));
+                email.To.Add(MailboxAddress.Parse("thomasbdc@yopmail.com"));
+                email.Subject = "Sending Email Using OAuth Net 6.0";
+                email.Body = new TextPart(TextFormat.Html) { Text = "<h3>Mail Body</h3>" };
+                using (var client = new SmtpClient())
+                {
+                    client.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
+                    var oauth2 = new SaslMechanismOAuth2(fromMail, userCredential.Token.AccessToken);
+                    client.Authenticate(oauth2);
+                    await client.SendAsync(email);
+                    client.Disconnect(true);
+                }
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="p1">Clé de récupération</param>
+        /// <param name="p2">Identifiant utilisateur</param>
+        /// <returns></returns>
+        public IActionResult ResetPassword(string p1, int p2)
+        {
+            return View();
         }
     }
 }
