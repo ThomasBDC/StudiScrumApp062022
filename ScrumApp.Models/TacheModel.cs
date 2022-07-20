@@ -10,6 +10,7 @@ namespace ScrumApp.Models
         public string Nom { get; set; }
         public string Description { get; set; }
         public StatusTache Status { get; set; }
+        public int IdProjet { get; set; }
     }
 
     public enum StatusTache

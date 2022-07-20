@@ -95,3 +95,18 @@ body {
     display: flex;
     justify-content: space-between;
 }
+
+.task-card {
+    padding: 5px;
+    border: 1px lightgray solid;
+    border-radius: 5px;
+    margin: 5px;
+    background-color: white;
+}
+
+.task-name {
+    font-size: 19px;
+    font-weight: bold;
+    border-bottom: solid 1px;
+    margin-bottom: 5px;
+}

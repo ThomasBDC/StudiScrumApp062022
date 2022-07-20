@@ -180,5 +180,53 @@ namespace SrumApp.Repository
 
             cnn.Close();
         }
+
+        public void AddTache(TacheModel tacheModel)
+        {
+            var cnn = this.OpenConnexion();
+
+            string sql = @"
+                INSERT INTO taches
+                    (
+                    nom,
+                    description,
+                    status,
+                    id_projet_parent)
+                    VALUES
+                    (
+                    @nom,
+                    @description,
+                    @status,
+                    @id_projet_parent)
+                ";
+
+            var cmd = new MySqlCommand(sql, cnn);
+            cmd.Parameters.AddWithValue("@nom", tacheModel.Nom);
+            cmd.Parameters.AddWithValue("@description", tacheModel.Description);
+            cmd.Parameters.AddWithValue("@status", (int)tacheModel.Status);
+            cmd.Parameters.AddWithValue("@id_projet_parent", tacheModel.IdProjet);
+
+            cmd.ExecuteNonQuery();
+            cnn.Close();
+        }
+
+        public void ChangeStatusTache(int idTache, StatusTache status)
+        {
+            var cnn = this.OpenConnexion();
+
+            string sql = @"
+                UPDATE taches SET
+                    status = @status
+                    WHERE idtaches = @idtaches
+                ";
+
+            var cmd = new MySqlCommand(sql, cnn);
+            cmd.Parameters.AddWithValue("@status", (int)status);
+            cmd.Parameters.AddWithValue("@idtaches", idTache);
+
+            cmd.ExecuteNonQuery();
+            cnn.Close();
+        }
+
     }
 }

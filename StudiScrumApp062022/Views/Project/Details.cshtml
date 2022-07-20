@@ -1,4 +1,5 @@
-﻿@model StudiScrumApp062022.Models.ProjetViewModel
+﻿@using ScrumApp.Models
+@model StudiScrumApp062022.Models.ProjetViewModel
 
 @{
     ViewData["Title"] = Model.Projet.Name;
@@ -15,36 +16,63 @@
     <hr />
     <div class="row" id="kanbanContainer">
         <div class="col-4">
-            <div class="taskbar-container todo">
+            <div class="taskbar-container todo" ondrop="drop(event, @((int)StatusTache.Todo))" ondragover="allowDrop(event)">
                 <div class="taskbar-header">
                     <h5>Todo</h5>
-                    <button class="btn btn-outline-primary">Add</button>
+                    <a class="btn btn-outline-primary" asp-controller="Tache" asp-action="Create" asp-route-idProjet="@Model.Projet.IdProjet">Add</a>
                 </div>
                 <div class="taskbar-body">
-                    @foreach(var tache in Model.allTaches)
+                    @foreach(var tache in Model.allTaches.Where(task => task.Status == ScrumApp.Models.StatusTache.Todo))
                     {
-                        <b>@tache.Nom</b>
+                        <div class="task-card" data-idTask="@tache.Id" id="@("tache"+tache.Id)" ondragstart="drag(event)" draggable="true">
+                            <div class="task-name">
+                                @tache.Nom
+                            </div>
+                            <div class="task-description">
+                                @tache.Description
+                            </div>
+                        </div>
                     }
                 </div>
             </div>
         </div>
         <div class="col-4">
-            <div class="taskbar-container in-progress">
+            <div class="taskbar-container in-progress" ondrop="drop(event, @((int)StatusTache.InProgress))" ondragover="allowDrop(event)">
                 <div class="taskbar-header">
                     <h5>In progress</h5>
                 </div>
                 <div class="taskbar-body">
-
+                    @foreach(var tache in Model.allTaches.Where(task => task.Status == ScrumApp.Models.StatusTache.InProgress))
+                    {
+                        <div class="task-card" data-idTask="@tache.Id" id="@("tache"+tache.Id)" ondragstart="drag(event)" draggable="true">
+                            <div class="task-name">
+                                @tache.Nom
+                            </div>
+                            <div class="task-description">
+                                @tache.Description
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
         <div class="col-4">
-            <div class="taskbar-container done">
+            <div class="taskbar-container done" ondrop="drop(event, @((int)StatusTache.Done))" ondragover="allowDrop(event)">
                 <div class="taskbar-header">
                     <h5>Done</h5>
                 </div>
                 <div class="taskbar-body">
-
+                    @foreach(var tache in Model.allTaches.Where(task => task.Status == ScrumApp.Models.StatusTache.Done))
+                    {
+                        <div class="task-card" data-idTask="@tache.Id" id="@("tache"+tache.Id)" ondragstart="drag(event)" draggable="true">
+                            <div class="task-name">
+                                @tache.Nom
+                            </div>
+                            <div class="task-description">
+                                @tache.Description
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
@@ -55,3 +83,34 @@
     @Html.ActionLink("Edit", "Edit", new { id = Model.Projet.IdProjet }) |
     <a asp-action="Index">Back to List</a>
 </div>
+
+@section scripts{
+    <script>
+        function allowDrop(ev) {
+          ev.preventDefault();
+        }
+
+        function drag(ev) {
+          ev.dataTransfer.setData("text", ev.target.id);
+        }
+
+        function drop(ev, idStatusTache) {
+          ev.preventDefault();
+          var data = ev.dataTransfer.getData("text");
+            let block = document.getElementById(data);
+          ev.target.appendChild(block);
+
+          //Faut faire un appel ajax pour vraiment modifier la tâche
+          $.ajax('/api/TachesApi/ChangeStatusTache?idTache='+block.dataset.idtask+'&status='+idStatusTache, 
+              {
+                method: 'GET', 
+                success: function (data,status,xhr) {   // success callback function
+                    console.log("Modification OK");
+                },
+                error: function (jqXhr, textStatus, errorMessage) { // error callback 
+                    alert("Modification impossible");
+                }
+            });
+        }
+</script>
+}
